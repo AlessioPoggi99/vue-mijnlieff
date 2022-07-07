@@ -22,6 +22,6 @@ Otherwise you can clone this repo and run it on your pc (make sure to have nodej
 ![start-vs-ai-landscape](screenshots/start-vs-ai-landscape.png?raw=true "Beginning of a solo game vs AI")
 ![end-vs-ai-landscape](screenshots/end-vs-ai-landscape.png?raw=true "End of a solo game vs AI")
 <div style="display: flex;" align="center">
-  <img src="screenshots/start-vs-ai-portrait.png" width="425"/>
-  <img src="screenshots/end-vs-ai-portrait.png" width="425"/>
+  <img src="screenshots/start-vs-ai-portrait.png" width="400"/>
+  <img src="screenshots/end-vs-ai-portrait.png" width="400"/>
 </div>
