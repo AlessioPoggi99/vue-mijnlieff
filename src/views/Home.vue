@@ -19,7 +19,7 @@ const soloModeSelected = ref(1)
       <section class="flex flex-col">
         <!-- INTRO DESCRIPTION -->
         <div class="flex flex-col mb-10">
-          <h2 class="text-2xl font-bold upper mb-2">Mijnlieff</h2>
+          <h2 class="text-3xl font-bold upper mb-2">Mijnlieff</h2>
           <p class="text-base lg:text-lg text-justify">
             This is an unofficial fan-made adaptation of the bagstract game Mijnlieff, designed by <a href="https://www.hopwoodgames.com" class="underline">Andy Hopwood</a>.
           </p>
