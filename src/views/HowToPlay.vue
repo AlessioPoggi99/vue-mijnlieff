@@ -5,7 +5,7 @@
 
   <main>
 
-    <div class="flex flex-col text-black px-6 lg:px-64">
+    <div class="flex flex-col text-black px-6 lg:px-64 mt-10">
 
       <section class="flex flex-col">
         <!-- RULES  -->

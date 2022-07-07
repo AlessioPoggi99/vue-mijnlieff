@@ -339,7 +339,7 @@ resetGame()
       :class="`flex ${playerColor === 'blue' ?
         tilesRotation.areRotate ? 'flex-col lg:flex-row-reverse' : 'flex-col-reverse lg:flex-row' :
         tilesRotation.areRotate ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row-reverse'}
-        gap-y-5 lg:gap-x-20 w-full items-center justify-center lg:min-h-[80vh] pb-10`"
+        gap-y-5 lg:gap-x-20 w-full items-center justify-center ${''/*lg:min-h-[80vh] pb-10*/} min-h-[calc(100vh-3.5rem)] py-10`"
     >
       <!-- BLUE TILES -->
       <div class="grid grid-cols-4 grid-rows-2 grid-flow-col lg:grid-cols-2 lg:grid-rows-4 lg:grid-flow-row gap-1">

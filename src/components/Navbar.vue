@@ -17,7 +17,7 @@ watchEffect(() => {
 
 <template>
   <header>
-    <nav class="flex relative w-full h-14 bg-blue-900/10 justify-center items-center text-center mb-10 px-6">
+    <nav class="flex relative w-full h-14 bg-blue-900/10 justify-center items-center text-center px-6">
       <router-link :to="'/'" class="text-2xl font-bold">MIJNLIEFF</router-link>
 
       <button 
