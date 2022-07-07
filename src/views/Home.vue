@@ -6,7 +6,7 @@ const isSoloModalOpen = ref(false)
 const soloModal = ref(null)
 onClickOutside(soloModal, () => isSoloModalOpen.value = false)
 
-const soloModeSelected = ref(0)
+const soloModeSelected = ref(1)
 
 </script>
 
@@ -72,13 +72,13 @@ const soloModeSelected = ref(0)
                   </button>
 
                   <router-link 
-                    :to="`/localgame?ai=true&playerColor=${soloModeSelected === 0 ? 'blue' : soloModeSelected === 1 ? 'rand' : 'pink'}`"
+                    :to="`/local-game?ai=true&playerColor=${soloModeSelected === 0 ? 'blue' : soloModeSelected === 1 ? 'rand' : 'pink'}`"
                     class="flex mt-6 py-1 w-full justify-center items-center rounded-md uppercase font-fam text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
                   >
                     play vs AI
                   </router-link>
                   <router-link 
-                    :to="`/localgame?ai=false&playerColor=${soloModeSelected === 0 ? 'blue' : soloModeSelected === 1 ? 'rand' : 'pink'}`"
+                    :to="`/local-game?ai=false&playerColor=${soloModeSelected === 0 ? 'blue' : soloModeSelected === 1 ? 'rand' : 'pink'}`"
                     class="flex mt-3 px-4 py-1 w-full justify-center items-center rounded-md uppercase font-fam text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
                   >
                     play locally

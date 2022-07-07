@@ -9,7 +9,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/localgame',
+    path: '/local-game',
     name: 'LocalGame',
     component: LocalGame,
     props: (route) => ({ 
