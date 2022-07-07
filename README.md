@@ -1,7 +1,17 @@
-# Vue 3 + Vite
+# Mijnlieff - unofficial
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is an unofficial fan-made adaptation of the bagstract game Mijnlieff, designed by Andy Hopwood.
 
-## Recommended IDE Setup
+The game is played on a 4 x 4 square grid. Each Player has eight pieces with two of four different symbols.
+Each piece when played determines where your opponent can play their next piece. For example you can force your 
+opponent to play in a straight line (either othogonally or diagonally) from the piece just played, or to play
+next to or away from the piece just played. The aim is to form lines of 3 pieces of your color to get a point
+or lines of 4 that worth you two points.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## How to try it
+
+You can try this unofficial app of Mijnlieff game on the website:
+- [Unofficial Mijnlieff](https://mijnlieff.netlify.app)
+Otherwise you can clone this repo and run it on your pc (make sure to have nodejs)
+- npm i
+- npm run dev
