@@ -336,10 +336,9 @@ resetGame()
   <main>
 
     <div 
-      :class="`flex ${props.ai ? playerColor === 'blue' ?
+      :class="`flex ${playerColor === 'blue' ?
         tilesRotation.areRotate ? 'flex-col lg:flex-row-reverse' : 'flex-col-reverse lg:flex-row' :
-        tilesRotation.areRotate ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row-reverse' :
-        tilesRotation.areRotate ? 'flex-col lg:flex-row-reverse' : 'flex-col-reverse lg:flex-row'}
+        tilesRotation.areRotate ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row-reverse'}
         gap-y-5 lg:gap-x-20 w-full items-center justify-center pb-10`"
     >
       <!-- BLUE TILES -->
