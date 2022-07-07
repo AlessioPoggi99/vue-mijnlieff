@@ -1,0 +1,11 @@
+{
+    "short_name": "Mijnlieff",
+    "name": "Mijnlieff",
+    "icons": [],
+    "start_url": ".",
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "#e5e7eb",
+    "background_color": "#e5e7eb"
+  }
+  
