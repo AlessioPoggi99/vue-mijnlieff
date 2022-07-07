@@ -358,7 +358,7 @@ resetGame()
       <div class="flex flex-col justify-center items-center">
         <!-- Turn -->
         <div class="flex flex-col w-full font-bold text-xl lg:text-2xl justify-center text-center items-center mb-2 lg:gap-y-1">
-          <div v-if="gameOver" class="flex w-full text-center justify-center items-center gap-x-4">
+          <div v-if="gameOver" :class="`flex ${playerColor === 'blue' ? 'flex-row' : 'flex-row-reverse'} w-full text-center justify-center items-center gap-x-4`">
             <h3 class="font-sans font-extrabold bg-blue-200 text-blue-900 rounded-md px-2 drop-shadow-sm shadow-blue-600/50">{{ points[0] }}</h3>
             <h3 :class="`uppercase font-black ${ points[0] === points[1] ? 'text-black' :  points[0] > points[1] ? 'text-blue-600' : 'text-pink-600'}`">
               {{ points[0] === points[1] ? 'draw' :  points[0] > points[1] ? 'blue wins' : 'pink wins'}}
