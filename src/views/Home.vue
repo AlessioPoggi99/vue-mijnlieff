@@ -86,7 +86,7 @@ const soloModeSelected = ref(1)
 
                   <h6 class="uppercase text-sm w-full flex justify-center items-center text-center font-bold font-fam mb-3 mt-3">or</h6>
                   <router-link 
-                    :to="`/onlinegame`"
+                    :to="`/online-game`"
                     class="flex px-4 py-1 w-full justify-center items-center rounded-md uppercase font-fam text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
                   >
                     play online
