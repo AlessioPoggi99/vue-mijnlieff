@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import HowToPlay from '../views/HowToPlay.vue'
 import LocalGame from '../views/LocalGame.vue'
 import OnlineGame from '../views/OnlineGame.vue'
+import Page404 from '../views/404Page.vue'
 
 const routes = [
   {
@@ -28,6 +29,15 @@ const routes = [
     path: '/online-game',
     name: 'OnlineGame',
     component: OnlineGame,
+  },
+  {
+    path: '/404',
+    name: 'PageNotFound',
+    component: Page404,
+  },
+  {
+    path: "/:catchAll(.*)", // Unrecognized path automatically matches 404
+    redirect: '/404',
   },
 ]
 
