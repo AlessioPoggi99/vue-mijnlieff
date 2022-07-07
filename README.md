@@ -16,3 +16,12 @@ You can try this unofficial app of Mijnlieff game on the website:
 Otherwise you can clone this repo and run it on your pc (make sure to have nodejs)
 - npm i
 - npm run dev
+
+## Screenshots
+
+![start-vs-ai-landscape](screenshots/start-vs-ai-landscape.png?raw=true "Beginning of a solo game vs AI")
+![end-vs-ai-landscape](screenshots/end-vs-ai-landscape.png?raw=true "End of a solo game vs AI")
+![start-vs-ai-portrait](screenshots/start-vs-ai-portrait.png?raw=true "Same beginning game (smaller device' screen)")
+![end-vs-ai-portrait](screenshots/start-vs-ai-portrait.png?raw=true "Same end game (smaller device' screen)")
+
+
