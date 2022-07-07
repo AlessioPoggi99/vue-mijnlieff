@@ -11,7 +11,7 @@ or lines of 4 that worth you two points.
 ## How to try it
 
 You can try this unofficial app of Mijnlieff game on the website:
-- [Unofficial Mijnlieff](https://mijnlieff.netlify.app)
+- [Mijnlieff Unofficial](https://mijnlieff.netlify.app)
 
 Otherwise you can clone this repo and run it on your pc (make sure to have nodejs)
 - npm i
