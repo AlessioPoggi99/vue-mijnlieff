@@ -21,7 +21,7 @@ const soloModeSelected = ref(1)
         <div class="flex flex-col mb-10">
           <h2 class="text-3xl font-bold upper mb-2">Mijnlieff</h2>
           <p class="text-base lg:text-lg text-justify">
-            This is an unofficial fan-made adaptation of the bagstract game Mijnlieff, designed by <a href="https://www.hopwoodgames.com" class="underline">Andy Hopwood</a>.
+            This is an unofficial fan-made adaptation of the bagstract game Mijnlieff, designed by <a href="https://www.hopwoodgames.com" class="underline" target="_blank">Andy Hopwood</a>.
           </p>
           <p class="text-base lg:text-lg text-justify">
             The game is played on a 4 x 4 square grid. Each Player has eight pieces with two of four different symbols. Each piece when played determines where your opponent can play their next piece. For example you can force your opponent to play in a straight line (either othogonally or diagonally) from the piece just played, or to play next to or away from the piece just played. The aim is to form lines of 3 pieces of your color to get a point or lines of 4 that worth you two points.
