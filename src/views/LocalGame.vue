@@ -154,7 +154,7 @@ const setBoardTilesPlayable = (payload) => {
   }
 }
 
-// Check if current player can take a move otherwise increment turn
+// Check if current player can make a move otherwise increment turn
 const checkCanMove = () => {
   canMove.value = false
   board.value.forEach(tile => {
@@ -369,7 +369,7 @@ resetGame()
             {{ turn % 2 === 0 ? 'Pink ' : 'Blue '}}<span class="text-black">can't move</span>
           </h6>
           <h6 v-else :class="`text-xs lg:text-sm font uppercase text-black ${gameOver ? 'opacity-0' : 'opacity-100'}`">
-            {{ props.ai ? ((turn % 2 === 0 && playerColor === 'blue') || (turn % 2 !== 0 && playerColor === 'pink')) ? 'Take a move' : "Opponent's turn" : 'Take a move' }}
+            {{ props.ai ? ((turn % 2 === 0 && playerColor === 'blue') || (turn % 2 !== 0 && playerColor === 'pink')) ? 'Make a move' : "Opponent's turn" : 'Make a move' }}
           </h6>
         </div>
         <!-- BOARD -->
