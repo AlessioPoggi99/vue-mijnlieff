@@ -20,6 +20,8 @@ const canMove = ref(true)
 const points = ref([0,0])
 const gameOver = ref(false)
 
+const isRoomModalOpen = ref(true)
+
 
 /*
 ### BOARD SETUP ###
@@ -339,8 +341,44 @@ resetGame()
       :class="`flex ${playerColor === 'blue' ?
         tilesRotation.areRotate ? 'flex-col lg:flex-row-reverse' : 'flex-col-reverse lg:flex-row' :
         tilesRotation.areRotate ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row-reverse'}
-        gap-y-5 lg:gap-x-20 w-full items-center justify-center ${''/*lg:min-h-[80vh] pb-10*/} min-h-[calc(100vh-3.5rem)] py-10`"
+        gap-y-5 lg:gap-x-20 w-full items-center justify-center ${''/*lg:min-h-[80vh] pb-10*/} min-h-[calc(100vh-3.5rem)] py-10
+        ${isRoomModalOpen ? 'blur-sm' : ''}`"
     >
+
+        <!-- MODAL -->
+        <Teleport to="#modal">
+          <Transition name="modal">
+            <div v-if="isRoomModalOpen" class="fixed w-screen h-screen top-0 left-0 bg-black/30 flex justify-center items-center">
+              <div ref="soloModal" class="relative bg-gradient-to-b from-blue-50 to-pink-50 px-16 py-10 rounded-md drop-shadow-md">
+
+                <input 
+                  placeholder="room code: 1234"
+                  class="flex py-1 w-full justify-center items-center rounded-md uppercase font-fam bg-white border border-blue-900/20 betterhover:hover:border-blue-900/50
+                   focus:border-blue-900/50 outline-none duration-300 drop-shadow-sm text-center text-base"
+                />
+
+                <button 
+                  class="flex mt-6 px-2 py-1 w-full justify-center items-center rounded-md uppercase font-fam text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
+                >
+                  Create game
+                </button>
+                <button 
+                  class="flex mt-3 py-1 w-full justify-center items-center rounded-md uppercase font-fam text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
+                >
+                  Join game
+                </button>
+                <router-link 
+                  :to="`/`"
+                  class="flex mt-3 py-1 w-full justify-center items-center rounded-md uppercase font-fam text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
+                >
+                  Back home
+                </router-link>
+
+              </div>
+            </div>
+          </Transition>
+        </Teleport>
+
       <!-- BLUE TILES -->
       <div class="grid grid-cols-4 grid-rows-2 grid-flow-col lg:grid-cols-2 lg:grid-rows-4 lg:grid-flow-row gap-1">
         <Tile v-for="(tile, index) in blueTiles" 

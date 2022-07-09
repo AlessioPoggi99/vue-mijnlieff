@@ -14,7 +14,7 @@ const soloModeSelected = ref(1)
 
   <main>
 
-    <div class="flex flex-col text-black px-6 lg:px-64 mt-10">
+    <div :class="{'blur-sm' : isSoloModalOpen, 'flex flex-col text-black px-6 lg:px-64 mt-10' : true}">
 
       <section class="flex flex-col">
         <!-- INTRO DESCRIPTION -->
@@ -36,6 +36,7 @@ const soloModeSelected = ref(1)
           >
             Play
           </button>
+          <!-- PLAY MODAL -->
           <Teleport to="#modal">
             <Transition name="modal">
               <div v-if="isSoloModalOpen" class="fixed w-screen h-screen top-0 left-0 bg-black/30 flex justify-center items-center">
