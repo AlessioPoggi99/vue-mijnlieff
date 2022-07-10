@@ -7,6 +7,8 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");//const io = require("socket.io")(server, { cors: { origin: "*" } });
 const io = new Server(server,  { cors: { origin: "*", method: ["GET", "POST"], } });
 
+const PORT = process.env.PORT || 8000;
+
 app.get('*', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
@@ -36,6 +38,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(8000, () => {
-  console.log('listening on *:8000');
+server.listen(PORT, () => {
+  console.log(`listening on *:${PORT}`);
 });
