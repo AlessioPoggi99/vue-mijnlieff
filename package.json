@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^8.9.0",
+    "socket.io-client": "^4.5.1",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1"
   },
