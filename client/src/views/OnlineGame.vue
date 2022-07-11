@@ -20,6 +20,7 @@ const waitingOpponent = ref(true)
 const waitingString = ref("Waiting opponent")
 
 const joinRoom = () => {
+  roomCode.value = roomCode.value.toUpperCase()
   if(roomCode.value.length >= 4)
     socket.emit("joinRoom", roomCode.value)
   else
@@ -344,11 +345,6 @@ watchEffect(() => {
     setAllBoardTilesPlayable(false)
     calculateWinner()
   }
-
-  if(roomCode.value) {
-    roomCodeError.value = false
-    isRoomFull.value = false
-  }
 })
 
 
@@ -410,13 +406,14 @@ resetGame()
 
                 <h6 class="uppercase text-base w-full flex justify-center items-center text-center font-bold mb-2">create or join a game</h6>
                 <input
-                  v-model="roomCode"
+                  @input="() => { roomCodeError = false; isRoomFull = false }"
+                  v-model.trim="roomCode"
                   placeholder="room code: 1234"
                   :class="`flex py-1 w-full justify-center items-center rounded-md uppercase bg-white border border-blue-900/20 betterhover:hover:border-blue-900/50
                    focus:border-blue-900/50 outline-none duration-300 drop-shadow-sm text-center text-base ${roomCodeError ? 'border-red-500/80' : ''}`"
                 />
-                <p v-show="roomCodeError" class="text-sm text-red-500/80 flex-wrap text-center mt-1">minimum 4 characters</p>
-                <p v-show="isRoomFull" class="text-sm text-red-500/80 flex-wrap text-center mt-1">this room is full</p>
+                <p v-if="roomCodeError" class="text-sm text-red-500/80 flex-wrap text-center mt-1">minimum 4 characters</p>
+                <p v-if="isRoomFull" class="text-sm text-red-500/80 flex-wrap text-center mt-1">this room is full</p>
 
                 <button 
                   @click="joinRoom"
