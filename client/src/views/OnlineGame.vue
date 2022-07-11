@@ -10,7 +10,7 @@ const isOnlineGame = true
 
 
 /*** HANDLE CONNECTIONS ***/
-const socket = io.connect("https://vue-mijnlieff-server.herokuapp.com") //io.connect("http://192.168.1.124:8000");https://vue-mijnlieff-server.herokuapp.com
+const socket = io.connect("https://vue-mijnlieff-server.herokuapp.com")
 const isRoomModalOpen = ref(true)
 const roomCode = ref("")
 const roomCodeError = ref(false)
@@ -47,11 +47,6 @@ socket.on("move", (args) => {
 /*** ### ### ### ***/
 
 const BOARD_DIM = 4
-  const props = defineProps({
-  ai: Boolean,
-  playerColor: String,
-})
-
 const playerColor = ref('blue')
 const board = ref([])
 const blueTiles = ref([])
@@ -117,7 +112,6 @@ const selectBoardTile = (payload) => {
     setBoardTilesPlayable(payload)
     checkCanMove()
     clearSelection()
-    if(!gameOver.value && props.ai && ( (turn.value % 2 === 0 && playerColor.value === 'pink') || (turn.value % 2 !== 0 && playerColor.value === 'blue')) ) aiPlay()
   }
 }
 
@@ -317,7 +311,6 @@ const selectTile = (payload) => {
   // When online game don't let select opponent's tiles
   if( (isOnlineGame && waitingOpponent.value) || (isOnlineGame && payload.color !== playerColor.value) )
     return
-  if(props.ai && ((turn.value % 2 === 0 && playerColor.value === 'pink') || (turn.value % 2 !== 0 && playerColor.value === 'blue'))) return
   if(payload.color === 'blue' && turn.value % 2 === 0) {
     if(blueTiles.value[payload.position].selected) {
       clearSelection()
@@ -349,23 +342,6 @@ watchEffect(() => {
 
 
 /*
-### AI ###
-*/
-const aiPlay = () => {
-  let playablePos = []
-  let playableTilePieces = []
-  board.value.forEach(tile => { if(tile.playable && tile.empty) playablePos.push(tile) })
-  if(playerColor.value === 'blue') {
-    pinkTiles.value.forEach(piece => { if(!piece.played) playableTilePieces.push(piece) })
-  } else {
-    blueTiles.value.forEach(piece => { if(!piece.played) playableTilePieces.push(piece) })
-  }
-  userSelection.value = playableTilePieces[Math.floor(Math.random() * playableTilePieces.length)]
-  setTimeout(() => selectBoardTile( playablePos[Math.floor(Math.random() * playablePos.length)] ), 1000)
-}
-
-
-/*
 ### RESET CONFIG & INITIALIZE GAME ###
 */
 const resetGame = () => {
@@ -379,8 +355,6 @@ const resetGame = () => {
   setupBoard()
   setupPlayer()
   setInitialBoardTilePlayable()
-  // AI
-  if(props.ai && playerColor.value === 'pink') aiPlay()
 }
 resetGame()
 </script>
@@ -398,40 +372,41 @@ resetGame()
         ${isRoomModalOpen ? 'blur-sm' : ''}`"
     >
 
-        <!-- MODAL -->
-        <Teleport to="#modal">
-          <Transition name="modal">
-            <div v-if="isRoomModalOpen" class="fixed w-screen h-screen top-0 left-0 bg-black/30 flex justify-center items-center font-fam">
-              <div ref="soloModal" class="relative bg-gradient-to-b from-blue-50 to-pink-50 px-12 py-10 rounded-md drop-shadow-md">
+      <!-- MODAL -->
+      <Teleport to="#modal">
+        <Transition name="modal">
+          <div v-if="isRoomModalOpen" class="fixed w-screen h-screen top-0 left-0 bg-black/30 flex justify-center items-center font-fam">
+            <div ref="soloModal" class="relative bg-gradient-to-b from-blue-50 to-pink-50 px-12 py-10 rounded-md drop-shadow-md">
 
-                <h6 class="uppercase text-base w-full flex justify-center items-center text-center font-bold mb-2">create or join a game</h6>
-                <input
-                  @input="() => { roomCodeError = false; isRoomFull = false }"
-                  v-model.trim="roomCode"
-                  placeholder="room code: 1234"
-                  :class="`flex py-1 w-full justify-center items-center rounded-md uppercase bg-white border border-blue-900/20 betterhover:hover:border-blue-900/50
-                   focus:border-blue-900/50 outline-none duration-300 drop-shadow-sm text-center text-base ${roomCodeError ? 'border-red-500/80' : ''}`"
-                />
-                <p v-if="roomCodeError" class="text-sm text-red-500/80 flex-wrap text-center mt-1">minimum 4 characters</p>
-                <p v-if="isRoomFull" class="text-sm text-red-500/80 flex-wrap text-center mt-1">this room is full</p>
+              <h6 class="uppercase text-base w-full flex justify-center items-center text-center font-bold mb-2">create or join a game</h6>
+              <input
+                @input="() => { roomCodeError = false; isRoomFull = false }"
+                v-model.trim="roomCode"
+                placeholder="room code: 1234"
+                :class="`flex py-1 w-full justify-center items-center rounded-md uppercase bg-white border border-blue-900/20 betterhover:hover:border-blue-900/50
+                  focus:border-blue-900/50 outline-none duration-300 drop-shadow-sm text-center text-base ${roomCodeError ? 'border-red-500/80' : ''}`"
+              />
+              <p v-if="roomCodeError" class="text-sm text-red-500/80 flex-wrap text-center mt-1">minimum 4 characters</p>
+              <p v-if="isRoomFull" class="text-sm text-red-500/80 flex-wrap text-center mt-1">this room is full</p>
 
-                <button 
-                  @click="joinRoom"
-                  class="flex mt-3 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
-                >
-                  Join game
-                </button>
-                <router-link 
-                  :to="`/`"
-                  class="flex mt-6 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
-                >
-                  Back home
-                </router-link>
+              <button 
+                @click="joinRoom"
+                class="flex mt-3 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
+              >
+                Join game
+              </button>
+              <router-link 
+                :to="`/`"
+                class="flex mt-6 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
+              >
+                Back home
+              </router-link>
 
-              </div>
             </div>
-          </Transition>
-        </Teleport>
+          </div>
+        </Transition>
+      </Teleport>
+      
 
       <!-- BLUE TILES -->
       <div class="grid grid-cols-4 grid-rows-2 grid-flow-col lg:grid-cols-2 lg:grid-rows-4 lg:grid-flow-row gap-1">
@@ -461,7 +436,7 @@ resetGame()
             {{ turn % 2 === 0 ? 'Pink ' : 'Blue '}}<span class="text-black">can't move</span>
           </h6>
           <h6 v-else :class="`text-xs lg:text-sm font uppercase text-black ${gameOver ? 'opacity-0' : 'opacity-100'}`">
-            {{ waitingOpponent ? waitingString : props.ai || isOnlineGame ? ((turn % 2 === 0 && playerColor === 'blue') || (turn % 2 !== 0 && playerColor === 'pink')) ? 'Make a move' : "Opponent's turn" : 'Make a move' }}
+            {{ waitingOpponent ? waitingString : isOnlineGame ? ((turn % 2 === 0 && playerColor === 'blue') || (turn % 2 !== 0 && playerColor === 'pink')) ? 'Make a move' : "Opponent's turn" : 'Make a move' }}
           </h6>
         </div>
         <!-- BOARD -->
