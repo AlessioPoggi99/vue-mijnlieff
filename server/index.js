@@ -37,6 +37,10 @@ io.on('connection', (socket) => {
   socket.on('leave-room', (roomCode) => {
     socket.leave(roomCode)
   });
+
+  socket.on('surrender', (roomCode) => {
+    socket.broadcast.to(roomCode).emit("opponent-surrender")
+  });
 });
 
 server.listen(PORT, () => {

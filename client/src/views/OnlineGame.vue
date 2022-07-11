@@ -3,19 +3,22 @@ import { ref, watchEffect } from 'vue'
 import Tile from '../components/Tile.vue';
 import Board from '../components/Board.vue';
 import GameOverModal from '../components/modals/GameOverModal.vue'
-import { tilesRotation } from '../store/store.js'
+import WhiteFlagModal from '../components/modals/WhiteFlagModal.vue'
+import { tilesRotation, whiteFlag } from '../store/store.js'
 import io from "socket.io-client";
 
 
 /*** HANDLE CONNECTIONS ***/
-const socket = io.connect("https://vue-mijnlieff-server.herokuapp.com")
+const socket = io.connect("http://192.168.1.124:8000")
+//const socket = io.connect("https://vue-mijnlieff-server.herokuapp.com")
 const isRoomModalOpen = ref(true)
 const roomCode = ref("")
 const roomCodeError = ref(false)
 const isRoomFull = ref(false)
 const playerIndex = ref(3)  // 1 = player1, 2 = player2, (>= 3) = room's full
 const waitingOpponent = ref(true)
-const waitingString = ref("Waiting opponent")
+const waitingStrings = [1, "Waiting opponent", "Waiting opponent.", "Waiting opponent..", "Waiting opponent..."]
+const waitingString = ref(waitingStrings[1])
 
 const joinRoom = () => {
   roomCode.value = roomCode.value.toUpperCase()
@@ -42,6 +45,10 @@ socket.on("move", (args) => {
   userSelection.value = args.userSelection
   selectBoardTile(args.payload)
 })
+socket.on("opponent-surrender", () => { 
+  handleOnSurrender(true)
+  hasOpponentSurrendered.value = true
+})
 /*** ### ### ### ***/
 
 const BOARD_DIM = 4
@@ -55,7 +62,8 @@ const canMove = ref(true)
 const points = ref([0,0])
 const gameOver = ref(false)
 const isGameOverModalOpen = ref(false)
-
+const isWhiteFlagModalOpen = ref(false)
+const hasOpponentSurrendered = ref(false)
 
 /*
 ### BOARD SETUP ###
@@ -129,11 +137,18 @@ const checkGameOver = () => {
     })
   }
 
-  if(finished) {
-    gameOver.value = true
-    socket.emit('leave-room', roomCode.value)
-    setTimeout(() => isGameOverModalOpen.value = true, 1000);
-  }
+  if(finished)
+    gameFinished(1)
+}
+const gameFinished = (secDelay) => {
+  gameOver.value = true
+  socket.emit('leave-room', roomCode.value)
+  setTimeout(() => isGameOverModalOpen.value = true, secDelay*1000);
+}
+const handleOnSurrender = (opponentSurrender) => {
+  isWhiteFlagModalOpen.value = false;
+  points.value = opponentSurrender ? (playerColor.value === 'blue' ? [3,0] : [0,3]) : (playerColor.value === 'blue' ? [0,3] : [3,0])
+  gameFinished(0)
 }
 
 // Set all the board tiles playable or not
@@ -335,10 +350,27 @@ const selectTile = (payload) => {
 /*
 ### GAME OVER LOGIC ###
 */
+let waitingInterval = null
 watchEffect(() => {
   if(gameOver.value) {
     setAllBoardTilesPlayable(false)
     calculateWinner()
+  }
+
+  if(waitingOpponent.value && !isRoomModalOpen.value && !gameOver.value) {
+    if(waitingInterval === null)
+      waitingInterval = setInterval(() => {
+        waitingStrings[0] += 1
+        if(waitingStrings[0] > waitingStrings.length-1) waitingStrings[0] = 1
+        waitingString.value = waitingStrings[waitingStrings[0]]
+      }, 1000)
+  } else {
+    clearInterval(waitingInterval)
+  }
+
+  if(whiteFlag.value.hasBeenClicked) {
+    isWhiteFlagModalOpen.value = true
+    whiteFlag.value.setHasBeenClicked(false)
   }
 })
 
@@ -355,6 +387,8 @@ const resetGame = () => {
   gameOver.value = false
   waitingOpponent.value = true
   isGameOverModalOpen.value = false;
+  waitingInterval = null
+  hasOpponentSurrendered.value = false
   setupBoard()
   setupPlayer()
   setInitialBoardTilePlayable()
@@ -378,7 +412,7 @@ const resetRoom = () => {
         tilesRotation.areRotate ? 'flex-col lg:flex-row-reverse' : 'flex-col-reverse lg:flex-row' :
         tilesRotation.areRotate ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row-reverse'}
         gap-y-5 lg:gap-x-20 w-full items-center justify-center ${''/*lg:min-h-[80vh] pb-10*/} min-h-[calc(100vh-3.5rem)] py-10
-        ${isRoomModalOpen ? 'blur-sm' : ''}`"
+        ${(isRoomModalOpen || isGameOverModalOpen || isWhiteFlagModalOpen) ? 'blur-sm' : ''}`"
     >
 
       <!-- MODAL -->
@@ -416,11 +450,12 @@ const resetRoom = () => {
         </Transition>
       </Teleport>
 
-      <!-- GAMEOVER MODAL -->
+      <!-- GAME OVER MODAL -->
       <GameOverModal 
         :isGameOverModalOpen="isGameOverModalOpen"
         :playerColor="playerColor"
         :points="points"
+        :hasOpponentSurrendered="hasOpponentSurrendered"
         @play-again="() => { 
           resetGame(); 
           joinRoom();
@@ -428,10 +463,21 @@ const resetRoom = () => {
         @new-room="() => { 
           resetGame();
           resetRoom();
+          socket.emit('leave-game', roomCode.value);
+        }"
+        @back-home="socket.emit('leave-game', roomCode)"
+      />
+
+      <!-- LEAVE MODAL -->
+      <WhiteFlagModal
+        :isWhiteFlagModalOpen="isWhiteFlagModalOpen"
+        @close-modal="isWhiteFlagModalOpen = false"
+        @surrender="() => { 
+          handleOnSurrender(false)
+          socket.emit('surrender', roomCode)
         }"
       />
       
-
       <!-- BLUE TILES -->
       <div class="grid grid-cols-4 grid-rows-2 grid-flow-col lg:grid-cols-2 lg:grid-rows-4 lg:grid-flow-row gap-1">
         <Tile v-for="(tile, index) in blueTiles" 

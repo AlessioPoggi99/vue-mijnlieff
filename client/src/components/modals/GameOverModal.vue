@@ -1,10 +1,11 @@
 <script setup>
 
-const emit = defineEmits(['play-again', 'new-room'])
+const emit = defineEmits(['play-again', 'new-room', 'back-home'])
 const props = defineProps({
   isGameOverModalOpen: Boolean,
   playerColor: String,
   points: Array,
+  hasOpponentSurrendered: Boolean,
 })
 
 </script>
@@ -24,6 +25,8 @@ const props = defineProps({
             <h3 class="font-sans font-extrabold bg-pink-200 text-pink-900 rounded-md px-2 drop-shadow-sm shadow-pink-600/50">{{ props.points[1] }}</h3>
           </div>
 
+          <h6 v-if="props.hasOpponentSurrendered" class="uppercase text-xs mt-2 w-full flex justify-center items-center text-center font-bold font-fam">opponent has surrendered</h6>
+
           <button
             @click="emit('play-again')"
             class="flex mt-6 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
@@ -38,6 +41,7 @@ const props = defineProps({
           </button>
           <router-link 
             :to="`/`"
+            @click="emit('back-home')"
             class="flex mt-6 px-8 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
           >
             Back to home

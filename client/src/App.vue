@@ -1,8 +1,10 @@
 <script setup>
 import Navbar from './components/Navbar.vue';
 
-var xmlHttp = new XMLHttpRequest();
-xmlHttp.open( "GET", "https://vue-mijnlieff-server.herokuapp.com", true ); // false for synchronous request
+var xhttp = new XMLHttpRequest();
+xhttp.open("GET", "https://vue-mijnlieff-server.herokuapp.com");
+xhttp.send();
+
 </script>
 
 <template>
