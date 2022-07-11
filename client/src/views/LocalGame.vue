@@ -5,7 +5,7 @@ import Board from '../components/Board.vue';
 import { tilesRotation } from '../store/store.js'
 
 const BOARD_DIM = 4
-  const props = defineProps({
+const props = defineProps({
   ai: Boolean,
   playerColor: String,
 })

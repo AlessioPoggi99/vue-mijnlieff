@@ -34,7 +34,8 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('disconnect', () => {
+  socket.on('leave-room', (roomCode) => {
+    socket.leave(roomCode)
   });
 });
 

@@ -2,11 +2,9 @@
 import { ref, watchEffect } from 'vue'
 import Tile from '../components/Tile.vue';
 import Board from '../components/Board.vue';
+import GameOverModal from '../components/modals/GameOverModal.vue'
 import { tilesRotation } from '../store/store.js'
 import io from "socket.io-client";
-
-/*** FOR TESTING ***/
-const isOnlineGame = true
 
 
 /*** HANDLE CONNECTIONS ***/
@@ -56,6 +54,7 @@ const turn = ref(0)
 const canMove = ref(true)
 const points = ref([0,0])
 const gameOver = ref(false)
+const isGameOverModalOpen = ref(false)
 
 
 /*
@@ -99,8 +98,8 @@ const selectBoardTile = (payload) => {
       pinkTiles.value[userSelection.value.position].played = true
     }
 
-    // Emit mmove to online opponent
-    if(isOnlineGame && userSelection.value.color === playerColor.value) 
+    // Emit move to online opponent
+    if(userSelection.value.color === playerColor.value) 
       socket.emit("play", { 
         roomCode: roomCode.value,
         payload: payload,
@@ -117,20 +116,23 @@ const selectBoardTile = (payload) => {
 
 // Check game over (when opponent has finished his tiles you have last move if you can play otherwise instant game over)
 const checkGameOver = () => {
+  let finished = true
   if(turn.value % 2 === 0) {
-    let finished = true
     pinkTiles.value.forEach(tile => {
       if(tile.played === false)
         finished = false
     })
-    if(finished) gameOver.value = true
   } else {
-    let finished = true
     blueTiles.value.forEach(tile => {
       if(tile.played === false)
         finished = false
     })
-    if(finished) gameOver.value = true
+  }
+
+  if(finished) {
+    gameOver.value = true
+    socket.emit('leave-room', roomCode.value)
+    setTimeout(() => isGameOverModalOpen.value = true, 1000);
   }
 }
 
@@ -309,7 +311,7 @@ const clearSelection = () => {
 // Allow current turn user to select only one own tile piece
 const selectTile = (payload) => {
   // When online game don't let select opponent's tiles
-  if( (isOnlineGame && waitingOpponent.value) || (isOnlineGame && payload.color !== playerColor.value) )
+  if( waitingOpponent.value || payload.color !== playerColor.value )
     return
   if(payload.color === 'blue' && turn.value % 2 === 0) {
     if(blueTiles.value[payload.position].selected) {
@@ -345,18 +347,25 @@ watchEffect(() => {
 ### RESET CONFIG & INITIALIZE GAME ###
 */
 const resetGame = () => {
-  if(!isOnlineGame)
-    playerColor.value = props.playerColor === null ? null : props.playerColor === 'blue' ? 'blue' : props.playerColor === 'pink' ? 'pink' : Math.round(Math.random()) === 0 ? 'blue' : 'pink'
+  playerColor.value = null
   userSelection.value = null
   turn.value = 0
   canMove.value = true
   points.value = [0,0]
   gameOver.value = false
+  waitingOpponent.value = true
+  isGameOverModalOpen.value = false;
   setupBoard()
   setupPlayer()
   setInitialBoardTilePlayable()
 }
 resetGame()
+
+const resetRoom = () => {
+  isRoomModalOpen.value = true
+  roomCode.value = ""
+  playerIndex.value = 3
+}
 </script>
 
 
@@ -399,13 +408,28 @@ resetGame()
                 :to="`/`"
                 class="flex mt-6 py-1 w-full justify-center items-center rounded-md uppercase text-xl bg-blue-900/10 betterhover:hover:bg-blue-900/20 duration-300 drop-shadow-sm"
               >
-                Back home
+                Back to home
               </router-link>
 
             </div>
           </div>
         </Transition>
       </Teleport>
+
+      <!-- GAMEOVER MODAL -->
+      <GameOverModal 
+        :isGameOverModalOpen="isGameOverModalOpen"
+        :playerColor="playerColor"
+        :points="points"
+        @play-again="() => { 
+          resetGame(); 
+          joinRoom();
+        }"
+        @new-room="() => { 
+          resetGame();
+          resetRoom();
+        }"
+      />
       
 
       <!-- BLUE TILES -->
@@ -436,7 +460,7 @@ resetGame()
             {{ turn % 2 === 0 ? 'Pink ' : 'Blue '}}<span class="text-black">can't move</span>
           </h6>
           <h6 v-else :class="`text-xs lg:text-sm font uppercase text-black ${gameOver ? 'opacity-0' : 'opacity-100'}`">
-            {{ waitingOpponent ? waitingString : isOnlineGame ? ((turn % 2 === 0 && playerColor === 'blue') || (turn % 2 !== 0 && playerColor === 'pink')) ? 'Make a move' : "Opponent's turn" : 'Make a move' }}
+            {{ waitingOpponent ? waitingString : ((turn % 2 === 0 && playerColor === 'blue') || (turn % 2 !== 0 && playerColor === 'pink')) ? 'Make a move' : "Opponent's turn" }}
           </h6>
         </div>
         <!-- BOARD -->
@@ -457,7 +481,7 @@ resetGame()
         <div class="flex w-full justify-center text-center items-center mt-2 lg:pt-7">
           <button
             @click="resetGame"
-            class="px-2 lg:px-3 lg:py-1 bg-gray-300 font-extrabold uppercase text-sm text-black rounded drop-shadow-sm betterhover:hover:bg-gray-400 duration-300"
+            class="opacity-0 px-2 lg:px-3 lg:py-1 bg-gray-300 font-extrabold uppercase text-sm text-black rounded drop-shadow-sm betterhover:hover:bg-gray-400 duration-300"
           >
             Reset game
           </button>
@@ -484,4 +508,13 @@ resetGame()
 
 
 <style>
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.25s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(1.1);
+}
 </style>
