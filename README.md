@@ -14,19 +14,23 @@ You can try this unofficial app of Mijnlieff game on the website:
 - [Mijnlieff Unofficial](https://mijnlieff.netlify.app)
 
 Otherwise you can clone this repo and run it on your pc (make sure to have nodejs)
-- npm i
-- npm run dev
+```
+npm i
+npm run dev
+```
 
 ## Screenshots
 
-![homme-landscape](screenshots/home-landscape.png?raw=true "Home screen")
-![start-vs-ai-landscape](screenshots/start-vs-ai-landscape.png?raw=true "Beginning of a solo game vs AI")
-![end-vs-ai-landscape](screenshots/end-vs-ai-landscape.png?raw=true "End of a solo game vs AI")
+![landscape-1](screenshots/L1.png?raw=true "Home screen")
+![landscape-2](screenshots/L2.png?raw=true "Play mode selection modal")
+![landscape-3](screenshots/L3.png?raw=true "Playing vs AI")
+![landscape-4](screenshots/L4.png?raw=true "End of a game vs AI")
+
 <div style="display: flex;" align="center">
-  <img src="screenshots/home-portrait.png" width="35%"/>
-  <img src="screenshots/start-vs-ai-portrait.png" width="35%"/>
+  <img src="screenshots/P1.png" width="35%"/>
+  <img src="screenshots/P2.png" width="35%"/>
 </div>
-<div style="display: flex; column-gap: 2rem;" align="center">
-  <img src="screenshots/end-vs-ai-portrait1.png" width="35%"/>
-  <img src="screenshots/end-vs-ai-portrait2.png" width="35%"/>
+<div style="display: flex;" align="center">
+  <img src="screenshots/P3.png" width="35%"/>
+  <img src="screenshots/P4.png" width="35%"/>
 </div>
