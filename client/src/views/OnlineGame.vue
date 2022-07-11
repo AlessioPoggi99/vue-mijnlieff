@@ -9,8 +9,8 @@ import io from "socket.io-client";
 
 
 /*** HANDLE CONNECTIONS ***/
-const socket = io.connect("http://192.168.1.124:8000")
-//const socket = io.connect("https://vue-mijnlieff-server.herokuapp.com")
+//const socket = io.connect("http://192.168.1.124:8000")
+const socket = io.connect("https://vue-mijnlieff-server.herokuapp.com")
 const isRoomModalOpen = ref(true)
 const roomCode = ref("")
 const roomCodeError = ref(false)
