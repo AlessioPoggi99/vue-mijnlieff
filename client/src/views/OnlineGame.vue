@@ -356,7 +356,7 @@ let waitingInterval = null
 watchEffect(() => {
   if(gameOver.value) {
     setAllBoardTilesPlayable(false)
-    if( !(hasOpponentSurrendered || haveSurrendered) ) calculateWinner()
+    if( !(hasOpponentSurrendered.value || haveSurrendered.value) ) calculateWinner()
   }
 
   if(waitingOpponent.value && !isRoomModalOpen.value && !gameOver.value) {
