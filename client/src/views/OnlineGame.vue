@@ -64,6 +64,7 @@ const gameOver = ref(false)
 const isGameOverModalOpen = ref(false)
 const isWhiteFlagModalOpen = ref(false)
 const hasOpponentSurrendered = ref(false)
+const haveSurrendered = ref(false)
 
 /*
 ### BOARD SETUP ###
@@ -146,6 +147,7 @@ const gameFinished = (secDelay) => {
   setTimeout(() => isGameOverModalOpen.value = true, secDelay*1000);
 }
 const handleOnSurrender = (opponentSurrender) => {
+  haveSurrendered.value = opponentSurrender ? false : true
   isWhiteFlagModalOpen.value = false;
   points.value = opponentSurrender ? (playerColor.value === 'blue' ? [3,0] : [0,3]) : (playerColor.value === 'blue' ? [0,3] : [3,0])
   gameFinished(0)
@@ -379,7 +381,7 @@ watchEffect(() => {
 ### RESET CONFIG & INITIALIZE GAME ###
 */
 const resetGame = () => {
-  playerColor.value = null
+  playerColor.value = 'blue' // was: null
   userSelection.value = null
   turn.value = 0
   canMove.value = true
@@ -389,6 +391,7 @@ const resetGame = () => {
   isGameOverModalOpen.value = false;
   waitingInterval = null
   hasOpponentSurrendered.value = false
+  haveSurrendered.value = false
   setupBoard()
   setupPlayer()
   setInitialBoardTilePlayable()
@@ -456,6 +459,8 @@ const resetRoom = () => {
         :playerColor="playerColor"
         :points="points"
         :hasOpponentSurrendered="hasOpponentSurrendered"
+        :waitingOpponent="waitingOpponent"
+        :haveSurrendered="haveSurrendered"
         @play-again="() => { 
           resetGame(); 
           joinRoom();
